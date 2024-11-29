@@ -1,0 +1,64 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Spellbreaker Inventory</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+  <link rel="stylesheet" th:href="@{/assets/styles.css}">
+</head>
+
+<body>
+<nav class="navbar is-transparent">
+  <div class="navbar-brand">
+    <a class="header-logo" href="/">
+      <img th:src="@{/assets/logo.png}" alt="Spellbreaker Logo" width="263" height="73.5">
+    </a>
+  </div>
+  <div id="navbar" class="navbar-menu">
+    <div class="navbar-start">
+      <a class="navbar-item" href="/purchase-orders"> Purchase Orders </a>
+      <a class="navbar-item" href="/parts"> Parts Inventory </a>
+    </div>
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="field is-grouped">
+          <p class="control">
+          <form th:action="@{/add-device}" method="get">
+            <button type="submit" class="button is-info" id="add-device-button">
+              <span>Add Device</span>
+            </button>
+          </form>
+          <form th:action="@{/logout}" method="post">
+            <button type="submit" class="button is-danger" id="logout-button">
+              <span>Logout</span>
+            </button>
+          </form>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div th:each="device : ${devices}">
+  <div class="card">
+    <header class="card-header">
+      <p class="card-header-title"><span th:text="${device.getDeviceName()}"></span></p>
+    </header>
+    <div class="card-content">
+      <div class="content">
+        <p th:text="${device.getCustomer().getCustomerName()}"></p>
+        <p th:text="${device.getCustomer().getEmail()}"></p>
+        <p th:text="${device.getCustomer().getPhoneNumber()}"></p>
+        <p><span th:text="${#dates.format(device.getTimestamp(), 'hh:mm a - MM/dd/yyyy')}"></span></p>
+      </div>
+    </div>
+    <footer class="card-footer">
+      <a href="?" class="card-footer-item">View</a>
+      <a href="#" class="card-footer-item">Delete</a>
+    </footer>
+  </div>
+</div>
+</body>
+</html>

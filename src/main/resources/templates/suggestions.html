@@ -1,0 +1,5 @@
+<ul th:fragment="suggestions" >
+    <li style="list-style-type: none; padding: 0; margin: 0" th:each="customer : ${customers}" onclick="selectCustomer('${customer.email}', '${customer.phoneNumber}')">
+        <p th:text="${customer.email}"></p><br><p th:text="${customer.phoneNumber}"></p>
+    </li>
+</ul>
