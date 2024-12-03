@@ -9,16 +9,19 @@ CREATE TABLE users (
 CREATE TABLE customers (
     id INTEGER PRIMARY KEY AUTO_INCREMENT,
     customer_name VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL,
     phone_number VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE devices (
-    id INTEGER PRIMARY KEY AUTO_INCREMENT,
-    device_name VARCHAR(255) NOT NULL,
-    description VARCHAR(255),
-    customer_id INTEGER NOT NULL,
-    FOREIGN KEY (customer_id) REFERENCES customers(id)
+                         id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                         device_name VARCHAR(255) NOT NULL,
+                         device_num VARCHAR(255) NOT NULL,
+                         description VARCHAR(255),
+                         status VARCHAR(255),
+                         customer_id INTEGER NOT NULL,
+                         timestamp DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                         FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
 CREATE TABLE notes (

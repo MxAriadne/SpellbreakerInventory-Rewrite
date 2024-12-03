@@ -20,11 +20,17 @@ public class Device {
     @Column(name = "device_name", nullable = false)
     private String deviceName;
 
+    @Column(name = "device_num", nullable = true)
+    private String deviceNum;
+
     @Column(name = "description", nullable = true)
     private String description;
 
+    @Column(name = "status", nullable = true)
+    private String status;
+
     @ColumnDefault("current_timestamp()")
-    @Column(name = "timestamp", nullable = false)
+    @Column(name = "timestamp", nullable = true)
     private Instant timestamp;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
