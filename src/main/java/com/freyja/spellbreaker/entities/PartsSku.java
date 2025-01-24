@@ -17,9 +17,6 @@ public class PartsSku {
     @Column(name = "part_name", nullable = false)
     private String partName;
 
-    @Column(name = "part_number", nullable = false)
-    private String partNumber;
-
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 

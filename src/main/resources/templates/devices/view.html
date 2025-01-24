@@ -103,7 +103,7 @@
                         <input class="input" type="text" id="partInput" name="partInput" placeholder="Add part from inventory" oninput="updateSuggestions(this, 'part')" autocomplete="off" />
                     </div>
                     <div class="control">
-                        <button type="submit" class="button is-primary">Add Part</button></button>
+                        <button type="submit" class="button is-primary">Add Part</button>
                     </div>
                 </div>
                 <div id="partSuggestions" class="suggestion-box" style="display: none;"></div>
@@ -121,8 +121,8 @@
                 <tbody>
                     <tr th:each="part : ${parts}">
                             <form method="post" th:action="@{'/update/' + ${part.getId()}}">
-                                <td th:text="${part.getPartNumber()}"></td>
-                                <td th:text="${part.getPartName()}"></td>
+                                <td th:text="${part.getSku().getId()}"></td>
+                                <td th:text="${part.getSku().getPartName()}"></td>
                                 <td><input class ="input" name="price" id="price" th:text="${part.getPrice()}"></td>
                                 <input type="hidden" name="deviceId" th:value="${device.getId()}">
                                 <td><button type="submit" class="button is-info">Update Price</button></td>

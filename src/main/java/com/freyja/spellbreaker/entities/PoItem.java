@@ -3,6 +3,8 @@ package com.freyja.spellbreaker.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 
@@ -16,20 +18,20 @@ public class PoItem {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "part_name", nullable = false)
-    private String partName;
-
-    @Column(name = "part_number", nullable = false)
-    private String partNumber;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "part_sku_id", nullable = false)
+    private PartsSku sku;
 
     @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Column(name = "quantity")
-    private String quantity;
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "po_id", nullable = false)
-    private com.freyja.spellbreaker.entities.PurchaseOrder po;
+    private PurchaseOrder po;
 
 }

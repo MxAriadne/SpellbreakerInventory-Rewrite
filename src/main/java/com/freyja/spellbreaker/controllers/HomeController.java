@@ -1,13 +1,7 @@
 package com.freyja.spellbreaker.controllers;
 
-import com.freyja.spellbreaker.entities.Customer;
-import com.freyja.spellbreaker.entities.Device;
-import com.freyja.spellbreaker.entities.Note;
-import com.freyja.spellbreaker.entities.PartsIndividual;
-import com.freyja.spellbreaker.repos.CustomerRepository;
-import com.freyja.spellbreaker.repos.DeviceRepository;
-import com.freyja.spellbreaker.repos.NotesRepository;
-import com.freyja.spellbreaker.repos.PartsRepository;
+import com.freyja.spellbreaker.entities.*;
+import com.freyja.spellbreaker.repos.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -33,6 +27,9 @@ public class HomeController {
 
     @Autowired
     private CustomerRepository customerRepo;
+
+    @Autowired
+    private SKURepository skuRepo;
 
     @GetMapping({"/", "/devices/ap", "/devices/ip", "/devices/nto", "/devices/rfp"})
     public String greeting(Model model, HttpServletRequest request) {
@@ -142,30 +139,43 @@ public class HomeController {
     @ResponseBody
     public List<Map<String, String>> autocomplete(@RequestParam String query, @RequestParam String type) {
 
-        if (Objects.equals(type, "phone") || Objects.equals(type, "email")) {
-            List<Customer> customers = (List<Customer>) customerRepo.findAll();
+        switch (type) {
+            case "phone", "email" -> {
+                List<Customer> customers = (List<Customer>) customerRepo.findAll();
 
-            return customers.stream()
-                    .filter(customer -> (type.equals("email") && customer.getEmail().contains(query)) ||
-                            (type.equals("phone") && customer.getPhoneNumber().contains(query)))
-                    .map(customer -> Map.of(
-                            "name", customer.getCustomerName(),
-                            "email", customer.getEmail(),
-                            "phoneNumber", customer.getPhoneNumber()
-                    ))
-                    .toList();
-        } else if (Objects.equals(type, "part")) {
-            List<PartsIndividual> parts = (List<PartsIndividual>) partsRepo.findAll();
-
-            return parts.stream()
-                    .filter(part -> part.getPartNumber().contains(query))
-                    .map(part -> Map.of(
-                            "partNumber", part.getPartNumber(),
-                            "partName", part.getPartName()
-                    ))
-                    .toList();
-        } else {
-            return Collections.emptyList();
+                return customers.stream()
+                        .filter(customer -> (type.equals("email") && customer.getEmail().contains(query)) ||
+                                (type.equals("phone") && customer.getPhoneNumber().contains(query)))
+                        .map(customer -> Map.of(
+                                "name", customer.getCustomerName(),
+                                "email", customer.getEmail(),
+                                "phoneNumber", customer.getPhoneNumber()
+                        )).limit(5)
+                        .toList();
+            }
+            case "part" -> {
+                List<PartsIndividual> parts = (List<PartsIndividual>) partsRepo.findAll();
+                return parts.stream()
+                        .filter(part -> part.getId().toString().contains(query) || part.getSku().getPartName().contains(query))
+                        .map(part -> Map.of(
+                                "partNumber", part.getSku().getId().toString(),
+                                "partName", part.getSku().getPartName()
+                        )).limit(5)
+                        .toList();
+            }
+            case "sku" -> {
+                List<PartsSku> parts = (List<PartsSku>) skuRepo.findAll();
+                return parts.stream()
+                        .filter(part -> part.getId().toString().contains(query) || part.getPartName().contains(query))
+                        .map(part -> Map.of(
+                                "partNumber", part.getId().toString(),
+                                "partName", part.getPartName()
+                        )).limit(5)
+                        .toList();
+            }
+            case null, default -> {
+                return Collections.emptyList();
+            }
         }
     }
 }

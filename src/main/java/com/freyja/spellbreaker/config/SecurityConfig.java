@@ -34,8 +34,8 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/assets/**", "/account/login/**", "/autocomplete").permitAll() // Allow public access to these paths
-                        .requestMatchers(HttpMethod.POST, "/login", "/autocomplete").permitAll()
+                        .requestMatchers("/assets/**", "/account/login/**", "/autocomplete", "/view-po/**").permitAll() // Allow public access to these paths
+                        .requestMatchers(HttpMethod.POST, "/login", "/autocomplete", "/add-part-po", "/create-po", "/delete-po").permitAll()
                         .anyRequest().authenticated() // Secure all other requests
                 )
                 .formLogin(form -> form
